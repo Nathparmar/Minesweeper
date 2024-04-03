@@ -1,19 +1,20 @@
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class Game {
 
-    private List<Cell> cellList;
+    private boolean gameStarted;
 
     public Game() {
-        this.cellList = new ArrayList<>();
+        this.gameStarted = false;
     }
 
-    public List<Cell> getCellList() {
-        return cellList;
+    public boolean isGameStarted() {
+        return gameStarted;
     }
 
-    public void setCellList(List<Cell> cellList) {
-        this.cellList = cellList;
+    public void setGameStarted(boolean gameStarted) {
+        this.gameStarted = gameStarted;
     }
+
+
 }

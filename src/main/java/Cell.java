@@ -1,4 +1,4 @@
-public class Cell {
+public class Cell extends Board{
 
     private int row;
 
@@ -46,7 +46,7 @@ public class Cell {
         isCovered = covered;
     }
 
-    public boolean isHasMine() {
+    public boolean hasMine() {
         return hasMine;
     }
 
@@ -54,7 +54,7 @@ public class Cell {
         this.hasMine = hasMine;
     }
 
-    public boolean isHasFlag() {
+    public boolean hasFlag() {
         return hasFlag;
     }
 

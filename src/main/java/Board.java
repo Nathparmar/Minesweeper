@@ -2,9 +2,15 @@ public class Board {
 
    private int numberOfCells;
 
+   private int numberOfBombs;
 
-    public Board(int numberOfCells) {
-        this.numberOfCells = 0;
+
+    public Board(int numberOfCells, int numberOfBombs) {
+        this.numberOfCells = numberOfCells;
+        this.numberOfBombs = numberOfBombs;
+    }
+
+    public Board() {
     }
 
     public int getNumberOfCells() {
@@ -15,6 +21,13 @@ public class Board {
         this.numberOfCells = numberOfCells;
     }
 
+    public int getNumberOfBombs() {
+        return numberOfBombs;
+    }
+
+    public void setNumberOfBombs(int numberOfBombs) {
+        this.numberOfBombs = numberOfBombs;
+    }
 
     public void makeBoard(int numberOfCells) {
         for (int i = 0; i < numberOfCells; i++) {
