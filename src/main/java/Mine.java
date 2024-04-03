@@ -6,8 +6,8 @@ public class Mine extends Board{
 
 
 
-    public Mine(Board board) {
-         this.board = board;
+    public Mine() {
+
     }
 
     public Board getBoard() {
@@ -18,10 +18,10 @@ public class Mine extends Board{
         this.board = board;
     }
 
-    public void createBomb(){
+    public void createMine(){
         Random random =  new Random();
         int xCoordinate = random.nextInt(getNumberOfCells());
-        int yCoordinate = random.nextInt(getNumberOfBombs());
+        int yCoordinate = random.nextInt(getNumberOfCells());
 
         Cell cell = new Cell(xCoordinate, yCoordinate);
 
@@ -29,7 +29,20 @@ public class Mine extends Board{
             cell.setHasMine(true);
             cell.setCovered(false);
         }else {
-            createBomb();
+            createMine();
         }
     }
+
+    public void produceMines(int numOfMines){
+        int numberOfBombs = numOfMines;
+        int count = 0;
+        do {
+            createMine();
+            count++;
+        }while (count < numberOfBombs);
+    }
+
+
+
+
 }

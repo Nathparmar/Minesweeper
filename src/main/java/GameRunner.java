@@ -20,6 +20,9 @@ public class GameRunner {
         int numberOfCells = scanner.nextInt();
         int numberOfBombs = numberOfCells;
         Board board = new Board(numberOfCells,numberOfBombs);
+
+//        Mine mine = new Mine();
+//        mine.produceMines(numberOfBombs);
         board.makeBoard(numberOfCells);
         System.out.println("Please give a cell number (e.g., [1,2] for the cell in the first row and second column):");
        String cellInput = scanner.next();
@@ -31,6 +34,10 @@ public class GameRunner {
         int col = Integer.parseInt(cellTokens[1]);
         System.out.println(row);
         System.out.println(col);
+
+        Cell cell = new Cell(row, col);
+        cell.cellChosen(row,col);
+
 
 
 

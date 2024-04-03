@@ -69,4 +69,15 @@ public class Cell extends Board{
     public void setNumberOfMinesAround(int numberOfMinesAround) {
         this.numberOfMinesAround = numberOfMinesAround;
     }
+
+    public void cellChosen(int row, int column){
+        Cell chosenCell = new Cell(row, column);
+        chosenCell.setCovered(false);
+        if (chosenCell.hasMine()){
+            Game currentGame = new Game();
+            currentGame.setGameStarted(false);
+            System.out.println("EEEXXXPPLOSION!, you stepped on a mine!");
+        }
+
+    }
 }

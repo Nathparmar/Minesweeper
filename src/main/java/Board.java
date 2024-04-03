@@ -10,6 +10,12 @@ public class Board {
         this.numberOfBombs = numberOfBombs;
     }
 
+
+
+
+
+
+
     public Board() {
     }
 
@@ -42,6 +48,8 @@ public class Board {
             System.out.println();
         }
     }
+
+
 
 
 }
