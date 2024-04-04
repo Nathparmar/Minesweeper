@@ -1,5 +1,7 @@
 import java.util.Random;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Game {
 
@@ -57,6 +59,12 @@ public class Game {
             }
         }
     }
+
+    public void addFlagToBoard(int x, int y){
+        board.getBoard()[x][y].setHasFlag(true);
+    }
+
+
 
     public void makeFirstChoice(int x, int y) {
         board.getBoard()[x][y].setMine(false);
@@ -142,10 +150,20 @@ public class Game {
         makeFirstChoice(row, col);
         displayBoard();
         do {
-            System.out.println("Please enter the coordinates of your next selection in the same format:");
+            System.out.println("Please enter the coordinates of your next selection in the same format");
+            System.out.println("Enter F[row, column] if you wish to place a flag in that position");
             String input = scanner.next();
-//            int x = scanner.nextInt();
-//            int y = scanner.nextInt();
+            if (input.contains("F")){
+                int[] values = extractValues(input);
+                if (values != null && values.length == 2) {
+                    int x = values[0];
+                    int y = values[1];
+                    addFlagToBoard(x, y);
+                }
+
+            }
+
+
             String[] tokens = splitCoordinates(input);
             int x = Integer.parseInt(tokens[0]);
             int y = Integer.parseInt(tokens[1]);
@@ -164,9 +182,23 @@ public class Game {
         return coordinateTokens;
     }
 
-    private boolean isSelected(int c, int d) {
-        if (!(isOutOfBound(c, 0) || isOutOfBound(d, 0))) {
-            if (board.getBoard()[c][d].isSelected()) {
+    public int[] extractValues(String input) {
+        // Regular expression pattern to match the string "F[x,y]"
+        Pattern pattern = Pattern.compile("F\\[(\\d+),(\\d+)\\]");
+        Matcher matcher = pattern.matcher(input);
+
+        if (matcher.find()) {
+            int x = Integer.parseInt(matcher.group(1));
+            int y = Integer.parseInt(matcher.group(2));
+            return new int[] { x, y };
+        } else {
+            return null; // Return null if no match found
+        }
+    }
+
+    private boolean isSelected(int x, int y) {
+        if (!(isOutOfBound(x, 0) || isOutOfBound(y, 0))) {
+            if (board.getBoard()[x][y].isSelected()) {
                 return true;
             }
         }
