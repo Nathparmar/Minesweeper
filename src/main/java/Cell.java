@@ -1,57 +1,36 @@
-public class Cell extends Board{
+public class Cell {
 
-    private int row;
+    private boolean isMine;
 
-    private int column;
-
-    private boolean isCovered;
-
-    private boolean hasMine;
-
-    private int numberOfMinesAround;
+    private boolean isSelected;
 
     private boolean hasFlag;
 
+    private String symbol;
 
-    public Cell(int row, int column) {
-        this.row = row;
-        this.column = column;
-        this.isCovered = true;
-        this.hasMine = false;
-        this.hasFlag = false;
-        this.numberOfMinesAround = numberOfMinesAround;
+    public Cell(boolean isMine, boolean isSelected, boolean hasFlag) {
+        this.isMine = isMine;
+        this.isSelected = isSelected;
+        this.hasFlag = hasFlag;
     }
 
-    public int getRow() {
-        return row;
+    public boolean isMine() {
+        return isMine;
     }
 
-    public void setRow(int row) {
-        this.row = row;
+    public void setMine(boolean mine) {
+        isMine = mine;
+        if (isMine){
+            setSymbol(" ! ");
+        }
     }
 
-    public int getColumn() {
-        return column;
+    public boolean isSelected() {
+        return isSelected;
     }
 
-    public void setColumn(int column) {
-        this.column = column;
-    }
-
-    public boolean isCovered() {
-        return isCovered;
-    }
-
-    public void setCovered(boolean covered) {
-        isCovered = covered;
-    }
-
-    public boolean hasMine() {
-        return hasMine;
-    }
-
-    public void setHasMine(boolean hasMine) {
-        this.hasMine = hasMine;
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 
     public boolean hasFlag() {
@@ -60,24 +39,16 @@ public class Cell extends Board{
 
     public void setHasFlag(boolean hasFlag) {
         this.hasFlag = hasFlag;
-    }
-
-    public int getNumberOfMinesAround() {
-        return numberOfMinesAround;
-    }
-
-    public void setNumberOfMinesAround(int numberOfMinesAround) {
-        this.numberOfMinesAround = numberOfMinesAround;
-    }
-
-    public void cellChosen(int row, int column){
-        Cell chosenCell = new Cell(row, column);
-        chosenCell.setCovered(false);
-        if (chosenCell.hasMine()){
-            Game currentGame = new Game();
-            currentGame.setGameStarted(false);
-            System.out.println("EEEXXXPPLOSION!, you stepped on a mine!");
+        if (hasFlag){
+            setSymbol(" F ");
         }
+    }
 
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
     }
 }
