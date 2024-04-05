@@ -37,8 +37,8 @@ public class Cell {
         return hasFlag;
     }
 
-    public void setHasFlag(boolean hasFlag) {
-        this.hasFlag = hasFlag;
+    public void setHasFlag(boolean flag) {
+        hasFlag = flag;
         if (hasFlag){
             setSymbol(" F ");
         }

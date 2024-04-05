@@ -62,7 +62,20 @@ public class Game {
 
     public void addFlagToBoard(int x, int y){
         board.getBoard()[x][y].setHasFlag(true);
+        board.getBoard()[x][y].setSelected(true);
     }
+
+    public void displayFlag() {
+        for (int i = 0; i < board.getDimensions(); i++) {
+            for (int j = 0; j < board.getDimensions(); j++) {
+                if (!board.getBoard()[i][j].isSelected() && board.getBoard()[i][j].isMine()) {
+                    board.getBoard()[i][j].setSelected(true);
+                }
+            }
+        }
+    }
+
+
 
 
 
@@ -140,11 +153,8 @@ public class Game {
         displayBoard();
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please give a coordinate number (e.g., [1,2] for the cell in the first row and second column):");
-//        int a = scan.nextInt();
-//        int b = scan.nextInt();
         String firstInput = scanner.next();
         String[] cellTokens = splitCoordinates(firstInput);
-//        String[] cellTokens = firstInput.substring(1, firstInput.length() - 1).split(",");
         int row = Integer.parseInt(cellTokens[0]);
         int col = Integer.parseInt(cellTokens[1]);
         makeFirstChoice(row, col);
@@ -153,25 +163,30 @@ public class Game {
             System.out.println("Please enter the coordinates of your next selection in the same format");
             System.out.println("Enter F[row, column] if you wish to place a flag in that position");
             String input = scanner.next();
-            if (input.contains("F")){
+
+            if (input.contains(String.valueOf('F'))){
                 int[] values = extractValues(input);
-                if (values != null && values.length == 2) {
-                    int x = values[0];
-                    int y = values[1];
-                    addFlagToBoard(x, y);
+                int x = values[0];
+                int y = values[1];
+                addFlagToBoard(x, y);
+
+                if (isSelected(x, y)) {
+                    System.out.println("This point has already been flagged. Please try again");
+                    continue;
                 }
 
+            }else {
+                String[] tokens = splitCoordinates(input);
+                int x = Integer.parseInt(tokens[0]);
+                int y = Integer.parseInt(tokens[1]);
+
+                if (isSelected(x, y)) {
+                    System.out.println("This point has already been selected. Please try again");
+                    continue;
+                }
+                chooseCoordinate(x,y);
             }
 
-
-            String[] tokens = splitCoordinates(input);
-            int x = Integer.parseInt(tokens[0]);
-            int y = Integer.parseInt(tokens[1]);
-            if (isSelected(x, y)) {
-                System.out.println("This point has already been selected. Please try again");
-                continue;
-            }
-            chooseCoordinate(x, y);
             displayBoard();
             wonGame();
         } while (!board.isEndGame());
