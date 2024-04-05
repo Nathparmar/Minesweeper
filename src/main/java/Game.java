@@ -65,15 +65,10 @@ public class Game {
         board.getBoard()[x][y].setSelected(true);
     }
 
-    public void displayFlag() {
-        for (int i = 0; i < board.getDimensions(); i++) {
-            for (int j = 0; j < board.getDimensions(); j++) {
-                if (!board.getBoard()[i][j].isSelected() && board.getBoard()[i][j].isMine()) {
-                    board.getBoard()[i][j].setSelected(true);
-                }
-            }
-        }
-    }
+   public void removeFlagFromBoard(int x, int y){
+        board.getBoard()[x][y].setHasFlag(false);
+        board.getBoard()[x][y].setSelected(false);
+   }
 
 
 
@@ -130,9 +125,9 @@ public class Game {
         if (checkIfMine(x, y)) {
             return;
         }
-        int s = findNumberOfNearByMines(x, y);
-        board.getBoard()[x][y].setSymbol(" " + Integer.toString(s) + " ");
-        if (s == 0) {
+        int num = findNumberOfNearByMines(x, y);
+        board.getBoard()[x][y].setSymbol(" " + Integer.toString(num) + " ");
+        if (num == 0) {
             for (int n = -1; n < 2; n++) {
                 for (int m = -1; m < 2; m++) {
                     if (!(isOutOfBound(x, m) || isOutOfBound(y, n))) {
@@ -164,24 +159,28 @@ public class Game {
             System.out.println("Enter F[row, column] if you wish to place a flag in that position");
             String input = scanner.next();
 
-            if (input.contains(String.valueOf('F'))){
+            if (input.indexOf('F') == 0){
                 int[] values = extractValues(input);
                 int x = values[0];
                 int y = values[1];
                 addFlagToBoard(x, y);
 
-                if (isSelected(x, y)) {
-                    System.out.println("This point has already been flagged. Please try again");
-                    continue;
-                }
+                System.out.println("To remove this flag please enter -F[row, column]");
 
-            }else {
+
+            } else if (input.contains(String.valueOf('F')) && input.contains(String.valueOf('-'))) {
+                int[] values = extractValues(input);
+                int x = values[0];
+                int y = values[1];
+                removeFlagFromBoard(x,y);
+
+            } else {
                 String[] tokens = splitCoordinates(input);
                 int x = Integer.parseInt(tokens[0]);
                 int y = Integer.parseInt(tokens[1]);
 
                 if (isSelected(x, y)) {
-                    System.out.println("This point has already been selected. Please try again");
+                    System.out.println("This point has already been selected. Please try again:");
                     continue;
                 }
                 chooseCoordinate(x,y);

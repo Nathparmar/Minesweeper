@@ -7,6 +7,14 @@ public class Main {
         Game game = new Game();
         game.startGame();
 
+//        String str = "-F[1,1]";
+//        if (str.contains(String.valueOf('F')) && str.contains(String.valueOf('-'))) {
+//            int[] values = game.extractValues(str);
+//            int x = values[0];
+//            int y = values[1];
+//            System.out.println(x);
+//            System.out.println(y);
+//        }
     }
 
 }
