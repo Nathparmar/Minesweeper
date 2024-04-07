@@ -63,18 +63,17 @@ public class Game {
 
     public void addFlagToBoard(int x, int y) {
         // Check if the cell (x, y) is within the board bounds
-            int flagsAvailable = board.getNumberOfFlags(); // Assuming board.getNumberOfFlags() returns an int directly
+        int flagsAvailable = board.getNumberOfFlags(); // Assuming board.getNumberOfFlags() returns an int directly
 
-            if (flagsAvailable > 0 && !board.getBoard()[x][y].hasFlag()) { // Check if flags are available and cell doesn't already have a flag
+        if (flagsAvailable > 0 && !board.getBoard()[x][y].hasFlag()) { // Check if flags are available and cell doesn't already have a flag
                 board.getBoard()[x][y].setHasFlag(true); // Place the flag on the specified cell
                 board.getBoard()[x][y].setSelected(true); // Optionally, mark the cell as selected
-
+                System.out.println("\tTo remove this flag please enter -F[row, column]");
                 board.setNumberOfFlags(board.getNumberOfFlags() - 1); // Decrement the number of available flags
                 System.out.println("\tYou have " + board.getNumberOfFlags() + " Flag(s) left.");
-            } else {
+        } else {
                 System.out.println("you have ran out of flags!");
-            }
-
+        }
 
     }
 
@@ -85,9 +84,6 @@ public class Game {
         board.setNumberOfFlags(board.getNumberOfFlags() + 1);
         System.out.println("\tYou have " + board.getNumberOfFlags() + " Flag(s) left.");
    }
-
-
-
 
 
     public void makeFirstChoice(int x, int y) {
@@ -163,44 +159,63 @@ public class Game {
         startBoard();
         displayBoard();
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Please give a coordinate number (e.g., [1,2] for the cell in the first row and second column):");
-        String firstInput = scanner.next();
-        String[] cellTokens = splitCoordinates(firstInput);
-        int row = Integer.parseInt(cellTokens[0]);
-        int col = Integer.parseInt(cellTokens[1]);
-        makeFirstChoice(row, col);
-        displayBoard();
-        do {
-            System.out.println("Please enter the coordinates of your next selection in the same format");
-            System.out.println("Enter F[row, column] if you wish to place a flag in that position");
-            String input = scanner.next();
-
-            if (input.indexOf('F') == 0){
-                int[] values = extractValues(input);
-                int x = values[0];
-                int y = values[1];
-
-                addFlagToBoard(x, y);
-                System.out.println("\tTo remove this flag please enter -F[row, column]");
+        while (true) {
+            System.out.println("Please give a coordinate number (e.g., [1,2] for the cell in the first row and second column):");
+            String firstInput = scanner.next();
+            String pattern = "\\[(\\d+),(\\d+)\\]";
 
 
-
-            } else if (input.contains(String.valueOf('F')) && input.contains(String.valueOf('-'))) {
-                int[] values = extractValues(input);
-                int x = values[0];
-                int y = values[1];
-                removeFlagFromBoard(x,y);
-
+            if (firstInput.matches(pattern)) {
+                String[] cellTokens = splitCoordinates(firstInput);
+                int row = Integer.parseInt(cellTokens[0]);
+                int col = Integer.parseInt(cellTokens[1]);
+                makeFirstChoice(row, col);
+                displayBoard();
+                break;
             } else {
-                String[] tokens = splitCoordinates(input);
-                int x = Integer.parseInt(tokens[0]);
-                int y = Integer.parseInt(tokens[1]);
+                System.out.println("Invalid input");
+            }
+        }
+        do {
+            while (true) {
+                System.out.println("Please enter the coordinates of your next selection in the same format");
+                System.out.println("Enter F[row, column] if you wish to place a flag in that position");
+                String input = scanner.next();
+                String patternF = "F\\[(\\d+),(\\d+)\\]";
+                String patternNF = "-F\\[(\\d+),(\\d+)\\]";
+                if (input.matches(patternF) || input.matches(patternNF)) {
 
-                if (isSelected(x, y)) {
-                    System.out.println("This point has already been selected. Please try again:");
-                    continue;
+                    if (input.indexOf('F') == 0) {
+                        int[] values = extractValues(input);
+                        int x = values[0];
+                        int y = values[1];
+
+                        addFlagToBoard(x, y);
+                        break;
+
+
+                    } else if (input.contains(String.valueOf('F')) && input.contains(String.valueOf('-'))) {
+                        int[] values = extractValues(input);
+                        int x = values[0];
+                        int y = values[1];
+                        removeFlagFromBoard(x, y);
+                        break;
+
+                    } else {
+                        String[] tokens = splitCoordinates(input);
+                        int x = Integer.parseInt(tokens[0]);
+                        int y = Integer.parseInt(tokens[1]);
+
+                        if (isSelected(x, y)) {
+                            System.out.println("This point has already been selected. Please try again:");
+                            continue;
+                        }
+                        chooseCoordinate(x, y);
+                        break;
+                    }
+                } else {
+                    System.out.println("Invalid Input");
                 }
-                chooseCoordinate(x,y);
             }
 
             displayBoard();
@@ -214,7 +229,6 @@ public class Game {
     }
 
     public int[] extractValues(String input) {
-        // Regular expression pattern to match the string "F[x,y]"
         Pattern pattern = Pattern.compile("F\\[(\\d+),(\\d+)\\]");
         Matcher matcher = pattern.matcher(input);
 
