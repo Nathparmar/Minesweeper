@@ -60,20 +60,26 @@ public class Game {
         }
     }
 
-    public void addFlagToBoard(int x, int y){ //adds flags to board
-        int flagsAvailable = Integer.valueOf(board.getNumberOfFlags());
-        while (flagsAvailable != 0) {
-            board.getBoard()[x][y].setHasFlag(true);
-            board.getBoard()[x][y].setSelected(true);
-            flagsAvailable--;
-        }
 
-        if (flagsAvailable == 0){
-            System.out.println("You have ran out of flags!");
-        }
+    public void addFlagToBoard(int x, int y) {
+        // Check if the cell (x, y) is within the board bounds
+            int flagsAvailable = board.getNumberOfFlags(); // Assuming board.getNumberOfFlags() returns an int directly
+
+            if (flagsAvailable > 0 && !board.getBoard()[x][y].hasFlag()) { // Check if flags are available and cell doesn't already have a flag
+                board.getBoard()[x][y].setHasFlag(true); // Place the flag on the specified cell
+                board.getBoard()[x][y].setSelected(true); // Optionally, mark the cell as selected
+
+                board.setNumberOfFlags(board.getNumberOfFlags() - 1); // Decrement the number of available flags
+                System.out.println("\tYou have " + board.getNumberOfFlags() + " Flag(s) left.");
+            } else {
+                System.out.println("you have ran out of flags!");
+            }
+
+
     }
 
-   public void removeFlagFromBoard(int x, int y){ //removes flags
+
+    public void removeFlagFromBoard(int x, int y){ //removes flags
         board.getBoard()[x][y].setHasFlag(false);
         board.getBoard()[x][y].setSelected(false);
    }
@@ -171,10 +177,10 @@ public class Game {
                 int[] values = extractValues(input);
                 int x = values[0];
                 int y = values[1];
-//                if (board.getBoard()[x][y].getSymbol() == findNumberOfNearByMines(x,y))
-                addFlagToBoard(x, y);
 
-                System.out.println("To remove this flag please enter -F[row, column]");
+                addFlagToBoard(x, y);
+                System.out.println("\tTo remove this flag please enter -F[row, column]");
+
 
 
             } else if (input.contains(String.valueOf('F')) && input.contains(String.valueOf('-'))) {

@@ -82,7 +82,7 @@ public class Board {
             case 1: // Beginner – 9 * 9 Board and 10 Mines
                 dimensions = 9;
                 numberOfMines = 10;
-                numberOfFlags = 2;
+                numberOfFlags = 10;
                 break;
 
             case 2: //  Intermediate – 16 * 16 Board and 40 Mines

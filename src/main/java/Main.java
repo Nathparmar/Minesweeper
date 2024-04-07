@@ -5,15 +5,9 @@ import java.util.regex.Pattern;
 public class Main {
     public static void main(String[] args) {
         Game game = new Game();
-//        game.startGame();
+        game.startGame();
 
-        String str = "[4,2]";
-        game.splitCoordinates(str);
-        System.out.println(game.splitCoordinates(str));
 
-        String s = "F[4,2]";
-//        game.extractValues(s);
-        System.out.println(game.extractValues(s));
     }
 
 }
