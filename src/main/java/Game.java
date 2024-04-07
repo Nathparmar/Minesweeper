@@ -82,6 +82,8 @@ public class Game {
     public void removeFlagFromBoard(int x, int y){ //removes flags
         board.getBoard()[x][y].setHasFlag(false);
         board.getBoard()[x][y].setSelected(false);
+        board.setNumberOfFlags(board.getNumberOfFlags() + 1);
+        System.out.println("\tYou have " + board.getNumberOfFlags() + " Flag(s) left.");
    }
 
 
