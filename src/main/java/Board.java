@@ -7,6 +7,8 @@ public class Board {
     private int selectedBoxes;
     private boolean endGame;
 
+    private int numberOfFlags;
+
     public void setEndGame(boolean endGame) {
         this.endGame = endGame;
     }
@@ -47,6 +49,14 @@ public class Board {
         this.board = board;
     }
 
+    public int getNumberOfFlags() {
+        return numberOfFlags;
+    }
+
+    public void setNumberOfFlags(int numberOfFlags) {
+        this.numberOfFlags = numberOfFlags;
+    }
+
     public Board() {
         Scanner scan = new Scanner(System.in);
         int difficulty ;
@@ -72,21 +82,25 @@ public class Board {
             case 1: // Beginner – 9 * 9 Board and 10 Mines
                 dimensions = 9;
                 numberOfMines = 10;
+                numberOfFlags = 2;
                 break;
 
             case 2: //  Intermediate – 16 * 16 Board and 40 Mines
                 dimensions = 16;
                 numberOfMines = 40;
+                numberOfFlags = 40;
                 break;
 
             case 3: //   Advanced – 24 * 24 Board and 99 Mines
                 dimensions = 24;
                 numberOfMines = 99;
+                numberOfFlags = 99;
                 break;
 
             default:
                 dimensions = 0;
                 numberOfMines = 0;
+                numberOfFlags = 0;
                 break;
         }
         board = new Cell[dimensions][dimensions];

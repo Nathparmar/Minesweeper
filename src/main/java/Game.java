@@ -11,12 +11,12 @@ public class Game {
     public void startBoard() {
         for (int i = 0; i < board.getDimensions(); i++) {
             for (int j = 0; j < board.getDimensions(); j++) {
-                board.getBoard()[i][j] = new Cell(false, false, false);
+                board.getBoard()[i][j] = new Cell(false, false, false); // creating a cell
             }
         }
     }
 
-    public void displayBoard() {
+    public void displayBoard() { // displays the board
         System.out.print("   ");
         for (int i = 0; i < board.getDimensions(); i++) {
             System.out.print(" " + i + "  ");
@@ -32,7 +32,7 @@ public class Game {
             for (int j = 0; j < board.getDimensions(); j++) {
                 if (!board.getBoard()[i][j].isSelected()) {
                     System.out.print("|X| ");
-                    if (j > 9) {
+                    if (j > 9) { //makes more space for double digit numbers to be aligned
                         System.out.print(" ");
                     }
                 } else {
@@ -48,24 +48,32 @@ public class Game {
     }
 
 
-    public void addMinesToBoard(int x, int y) {
+    public void addMinesToBoard(int x, int y) { // creates randomised mines for baord
         int mines = Integer.valueOf(board.getNumberOfMines());
         while (mines != 0) {
             int xRandom = (int) (Math.random() * board.getDimensions());
             int yRandom = (int) (Math.random() * board.getDimensions());
-            if (xRandom != x && yRandom != y) {
+            if (xRandom != x && yRandom != y) { //makes sure mines not repeated
                 board.getBoard()[xRandom][yRandom].setMine(true);
                 mines--;
             }
         }
     }
 
-    public void addFlagToBoard(int x, int y){
-        board.getBoard()[x][y].setHasFlag(true);
-        board.getBoard()[x][y].setSelected(true);
+    public void addFlagToBoard(int x, int y){ //adds flags to board
+        int flagsAvailable = Integer.valueOf(board.getNumberOfFlags());
+        while (flagsAvailable != 0) {
+            board.getBoard()[x][y].setHasFlag(true);
+            board.getBoard()[x][y].setSelected(true);
+            flagsAvailable--;
+        }
+
+        if (flagsAvailable == 0){
+            System.out.println("You have ran out of flags!");
+        }
     }
 
-   public void removeFlagFromBoard(int x, int y){
+   public void removeFlagFromBoard(int x, int y){ //removes flags
         board.getBoard()[x][y].setHasFlag(false);
         board.getBoard()[x][y].setSelected(false);
    }
@@ -163,6 +171,7 @@ public class Game {
                 int[] values = extractValues(input);
                 int x = values[0];
                 int y = values[1];
+//                if (board.getBoard()[x][y].getSymbol() == findNumberOfNearByMines(x,y))
                 addFlagToBoard(x, y);
 
                 System.out.println("To remove this flag please enter -F[row, column]");
@@ -229,7 +238,8 @@ public class Game {
     private void endGame() {
         if (board.getSelectedBoxes() != ((board.getDimensions() * board.getDimensions()) - board.getNumberOfMines())) {
             displayMines();
-            System.out.println("EEEXXXXPPLLLOSSION!!!!, You stepped on a mine. Game over");
+            System.out.println("EEEXXXXPPLLLOSSION!!!!, You stepped on a mine.");
+            System.out.println("GAME OVER!!!");;
         } else {
             System.out.println("Congratulations!!!, you have won!");
         }
