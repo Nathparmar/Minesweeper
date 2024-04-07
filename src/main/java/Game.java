@@ -164,14 +164,20 @@ public class Game {
             String firstInput = scanner.next();
             String pattern = "\\[(\\d+),(\\d+)\\]";
 
-
             if (firstInput.matches(pattern)) {
-                String[] cellTokens = splitCoordinates(firstInput);
-                int row = Integer.parseInt(cellTokens[0]);
-                int col = Integer.parseInt(cellTokens[1]);
-                makeFirstChoice(row, col);
-                displayBoard();
-                break;
+
+                    String[] cellTokens = splitCoordinates(firstInput);
+                    int row = Integer.parseInt(cellTokens[0]);
+                    int col = Integer.parseInt(cellTokens[1]);
+                    if (!isOutOfBound(row, col)) {
+                        makeFirstChoice(row, col);
+                        displayBoard();
+                        break;
+                    } else {
+                        System.out.println("Coordinates are out of bounds.");
+//                        System.out.println("Please give a coordinate number (e.g., [1,2] for the cell in the first row and second column):");
+
+                    }
             } else {
                 System.out.println("Invalid input");
             }
@@ -189,18 +195,15 @@ public class Game {
                         int[] values = extractValues(input);
                         int x = values[0];
                         int y = values[1];
-
                         addFlagToBoard(x, y);
                         break;
-
 
                     } else if (input.contains(String.valueOf('F')) && input.contains(String.valueOf('-'))) {
                         int[] values = extractValues(input);
                         int x = values[0];
                         int y = values[1];
-                        removeFlagFromBoard(x, y);
-                        break;
-
+                            removeFlagFromBoard(x, y);
+                            break;
                     } else {
                         String[] tokens = splitCoordinates(input);
                         int x = Integer.parseInt(tokens[0]);
