@@ -64,24 +64,32 @@ public class Game {
     public void addFlagToBoard(int x, int y) {
         int flagsAvailable = board.getNumberOfFlags(); // Assuming board.getNumberOfFlags() returns an int directly
 
-        if (flagsAvailable > 0 && !board.getBoard()[x][y].hasFlag()) { // Check if flags are available and cell doesn't already have a flag
+        if (flagsAvailable > 0 && !board.getBoard()[x][y].hasFlag() && !board.getBoard()[x][y].isSelected()) { // Check if flags are available and cell doesn't already have a flag
             board.getBoard()[x][y].setHasFlag(true);
             board.getBoard()[x][y].setSelected(true);
             System.out.println("\tTo remove this flag please enter -F[row, column]");
             board.setNumberOfFlags(board.getNumberOfFlags() - 1); // Decrement the number of available flags
             System.out.println("\tYou have " + board.getNumberOfFlags() + " Flag(s) left.");
         } else {
-            System.out.println("you have ran out of flags!");
+            System.out.println("Unable to place flag here");
+        }
+
+        if (flagsAvailable == 0){
+            System.out.println("You have ran out of flags");
         }
 
     }
 
 
     public void removeFlagFromBoard(int x, int y) { //removes flags
-        board.getBoard()[x][y].setHasFlag(false);
-        board.getBoard()[x][y].setSelected(false);
-        board.setNumberOfFlags(board.getNumberOfFlags() + 1); //increment number of available flags
-        System.out.println("\tYou have " + board.getNumberOfFlags() + " Flag(s) left.");
+        if (board.getBoard()[x][y].getSymbol() == " F ") {
+            board.getBoard()[x][y].setHasFlag(false);
+            board.getBoard()[x][y].setSelected(false);
+            board.setNumberOfFlags(board.getNumberOfFlags() + 1); //increment number of available flags
+            System.out.println("\tYou have " + board.getNumberOfFlags() + " Flag(s) left.");
+        }else {
+            System.out.println("There is no flag here.");
+        }
     }
 
 
@@ -107,7 +115,7 @@ public class Game {
         return numberOfMinesFound;
     }
 
-    public boolean isOutOfBound(int x, int y) { //checks if the coordinates are out of array bounds
+    public boolean isOutOfBound(int x, int y) { //checks if the coordinates are out of array bounds for number of mines
         return (x + y >= board.getDimensions() || x + y < 0);
     }
 
@@ -167,7 +175,7 @@ public class Game {
                 String[] cellTokens = splitCoordinates(firstInput);
                 int row = Integer.parseInt(cellTokens[0]);
                 int col = Integer.parseInt(cellTokens[1]);
-                if (!isOutOfBound(row, col)) {
+                if (!invalidCoordinate(row, col)) {
                     makeFirstChoice(row, col);
                     displayBoard();
                     break;
@@ -187,7 +195,7 @@ public class Game {
                 String input = scanner.next();
                 String patternF = "F\\[(\\d+),(\\d+)\\]";
                 String patternNF = "-F\\[(\\d+),(\\d+)\\]";
-                if (input.matches(patternF) || input.matches(patternNF)) {
+//                if (input.matches(patternF) || input.matches(patternNF)) {
 
                     if (input.indexOf('F') == 0) {
                         int[] values = extractValues(input);
@@ -215,13 +223,17 @@ public class Game {
                         chooseCoordinate(x, y);
                         break;
                     }
-                } else {
-                    System.out.println("Invalid Input");
-                }
+//                } else {
+//                    System.out.println("Invalid Input");
+//                }
             }
             displayBoard();
             wonGame();
         } while (!board.isEndGame());
+    }
+
+    public boolean invalidCoordinate(int x, int y) { //checks if the coordinates are out of array bounds for number of mines
+        return (x > board.getDimensions() || x < 0 || y > board.getDimensions() || y < 0);
     }
 
     public String[] splitCoordinates(String coordinates) {
