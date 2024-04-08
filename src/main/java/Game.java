@@ -32,7 +32,7 @@ public class Game {
             for (int j = 0; j < board.getDimensions(); j++) {
                 if (!board.getBoard()[i][j].isSelected()) {
                     System.out.print("|X| ");
-                    if (j > 9) { //makes more space for double digit numbers to be aligned
+                    if (j > 9) { //makes more space for double digit numbers to be aligned on board
                         System.out.print(" ");
                     }
                 } else {
@@ -62,32 +62,31 @@ public class Game {
 
 
     public void addFlagToBoard(int x, int y) {
-        // Check if the cell (x, y) is within the board bounds
         int flagsAvailable = board.getNumberOfFlags(); // Assuming board.getNumberOfFlags() returns an int directly
 
         if (flagsAvailable > 0 && !board.getBoard()[x][y].hasFlag()) { // Check if flags are available and cell doesn't already have a flag
-                board.getBoard()[x][y].setHasFlag(true); // Place the flag on the specified cell
-                board.getBoard()[x][y].setSelected(true); // Optionally, mark the cell as selected
-                System.out.println("\tTo remove this flag please enter -F[row, column]");
-                board.setNumberOfFlags(board.getNumberOfFlags() - 1); // Decrement the number of available flags
-                System.out.println("\tYou have " + board.getNumberOfFlags() + " Flag(s) left.");
+            board.getBoard()[x][y].setHasFlag(true);
+            board.getBoard()[x][y].setSelected(true);
+            System.out.println("\tTo remove this flag please enter -F[row, column]");
+            board.setNumberOfFlags(board.getNumberOfFlags() - 1); // Decrement the number of available flags
+            System.out.println("\tYou have " + board.getNumberOfFlags() + " Flag(s) left.");
         } else {
-                System.out.println("you have ran out of flags!");
+            System.out.println("you have ran out of flags!");
         }
 
     }
 
 
-    public void removeFlagFromBoard(int x, int y){ //removes flags
+    public void removeFlagFromBoard(int x, int y) { //removes flags
         board.getBoard()[x][y].setHasFlag(false);
         board.getBoard()[x][y].setSelected(false);
-        board.setNumberOfFlags(board.getNumberOfFlags() + 1);
+        board.setNumberOfFlags(board.getNumberOfFlags() + 1); //increment number of available flags
         System.out.println("\tYou have " + board.getNumberOfFlags() + " Flag(s) left.");
-   }
+    }
 
 
     public void makeFirstChoice(int x, int y) {
-        board.getBoard()[x][y].setMine(false);
+        board.getBoard()[x][y].setMine(false);  //makes sure not to hit mine on first attempt
         board.getBoard()[x][y].setSelected(true);
         board.getBoard()[x][y].setSymbol(Integer.toString(findNumberOfNearByMines(x, y)));
         addMinesToBoard(x, y);
@@ -108,7 +107,7 @@ public class Game {
         return numberOfMinesFound;
     }
 
-    private boolean isOutOfBound(int x, int y) { //checks if the coordinates are out of array bounds
+    public boolean isOutOfBound(int x, int y) { //checks if the coordinates are out of array bounds
         return (x + y >= board.getDimensions() || x + y < 0);
     }
 
@@ -121,7 +120,7 @@ public class Game {
         }
     }
 
-    public void displayMines() {
+    public void displayMines() { //for when it's the end of game and need to display all mines
         for (int i = 0; i < board.getDimensions(); i++) {
             for (int j = 0; j < board.getDimensions(); j++) {
                 if (!board.getBoard()[i][j].isSelected() && board.getBoard()[i][j].isMine()) {
@@ -131,27 +130,26 @@ public class Game {
         }
     }
 
-    private void chooseCoordinate(int x, int y) { //allows the player to select coordinates
+    public void chooseCoordinate(int x, int y) { //allows the player to select coordinates
         board.getBoard()[x][y].setSelected(true);
         board.setSelectedBoxes(1);
         if (checkIfMine(x, y)) {
             return;
         }
         int num = findNumberOfNearByMines(x, y);
-        board.getBoard()[x][y].setSymbol(" " + Integer.toString(num) + " ");
+        board.getBoard()[x][y].setSymbol(" " + num + " ");
         if (num == 0) {
             for (int n = -1; n < 2; n++) {
                 for (int m = -1; m < 2; m++) {
                     if (!(isOutOfBound(x, m) || isOutOfBound(y, n))) {
                         if (!board.getBoard()[x + m][y + n].isSelected()) {
-                            chooseCoordinate(x + m, y + n);
+                            chooseCoordinate(x + m, y + n); //spreading the board when 0 mines is selected
                         }
                     }
                 }
             }
         }
     }
-
 
 
     public void startGame() {
@@ -166,21 +164,21 @@ public class Game {
 
             if (firstInput.matches(pattern)) {
 
-                    String[] cellTokens = splitCoordinates(firstInput);
-                    int row = Integer.parseInt(cellTokens[0]);
-                    int col = Integer.parseInt(cellTokens[1]);
-                    if (!isOutOfBound(row, col)) {
-                        makeFirstChoice(row, col);
-                        displayBoard();
-                        break;
-                    } else {
-                        System.out.println("Coordinates are out of bounds.");
-//                        System.out.println("Please give a coordinate number (e.g., [1,2] for the cell in the first row and second column):");
+                String[] cellTokens = splitCoordinates(firstInput);
+                int row = Integer.parseInt(cellTokens[0]);
+                int col = Integer.parseInt(cellTokens[1]);
+                if (!isOutOfBound(row, col)) {
+                    makeFirstChoice(row, col);
+                    displayBoard();
+                    break;
+                } else {
+                    System.out.println("Coordinates are out of bounds.");
+                }
 
-                    }
             } else {
                 System.out.println("Invalid input");
             }
+
         }
         do {
             while (true) {
@@ -202,8 +200,9 @@ public class Game {
                         int[] values = extractValues(input);
                         int x = values[0];
                         int y = values[1];
-                            removeFlagFromBoard(x, y);
-                            break;
+                        removeFlagFromBoard(x, y);
+                        break;
+
                     } else {
                         String[] tokens = splitCoordinates(input);
                         int x = Integer.parseInt(tokens[0]);
@@ -220,13 +219,12 @@ public class Game {
                     System.out.println("Invalid Input");
                 }
             }
-
             displayBoard();
             wonGame();
         } while (!board.isEndGame());
     }
 
-    public String[] splitCoordinates(String coordinates){
+    public String[] splitCoordinates(String coordinates) {
         String[] coordinateTokens = coordinates.substring(1, coordinates.length() - 1).split(",");
         return coordinateTokens;
     }
@@ -238,7 +236,7 @@ public class Game {
         if (matcher.find()) {
             int x = Integer.parseInt(matcher.group(1));
             int y = Integer.parseInt(matcher.group(2));
-            return new int[] { x, y };
+            return new int[]{x, y};
         } else {
             return null; // Return null if no match found
         }
@@ -262,9 +260,10 @@ public class Game {
 
     private void endGame() {
         if (board.getSelectedBoxes() != ((board.getDimensions() * board.getDimensions()) - board.getNumberOfMines())) {
-            displayMines();
+            displayMines(); //display mines when game has ended
             System.out.println("EEEXXXXPPLLLOSSION!!!!, You stepped on a mine.");
-            System.out.println("GAME OVER!!!");;
+            System.out.println("GAME OVER!!!");
+            ;
         } else {
             System.out.println("Congratulations!!!, you have won!");
         }

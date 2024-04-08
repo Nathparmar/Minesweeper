@@ -59,12 +59,12 @@ public class Board {
 
     public Board() {
         Scanner scan = new Scanner(System.in);
-        int difficulty ;
+        int difficulty;
         do {
             System.out.println("Enter Difficulty level to begin game");
-            System.out.println("1: Beginner – 9 * 9 Board and 10 Mines ");
-            System.out.println("2: Intermediate – 16 * 16 Board and 40 Mines ");
-            System.out.println("3: Expert – 24 * 24 Board and 99 Mines ");
+            System.out.println("1: Beginner – 9 * 9 Board with 10 Mines and 10 Flags. ");
+            System.out.println("2: Intermediate – 16 * 16 Board with 40 Mines and 40 Flags ");
+            System.out.println("3: Expert – 24 * 24 Board and 99 Mines and 99 Flags ");
             while (!scan.hasNextInt()) {
                 System.out.println("Invalid input. Please enter a number between 1 and 3.");
                 scan.next(); // Consume and discard the invalid input
@@ -79,19 +79,19 @@ public class Board {
         } while (!(difficulty == 1 || difficulty == 2 || difficulty == 3));
 
         switch (difficulty) {
-            case 1: // Beginner – 9 * 9 Board and 10 Mines
+            case 1: // Beginner – 9 * 9 Board
                 dimensions = 9;
                 numberOfMines = 10;
                 numberOfFlags = 10;
                 break;
 
-            case 2: //  Intermediate – 16 * 16 Board and 40 Mines
+            case 2: //  Intermediate – 16 * 16 Board
                 dimensions = 16;
                 numberOfMines = 40;
                 numberOfFlags = 40;
                 break;
 
-            case 3: //   Advanced – 24 * 24 Board and 99 Mines
+            case 3: //   Advanced – 24 * 24 Board
                 dimensions = 24;
                 numberOfMines = 99;
                 numberOfFlags = 99;
